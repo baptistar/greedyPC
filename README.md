@@ -33,9 +33,9 @@ For each sample size, N, the function extracts a subset of the training points `
 
 ```Matlab
 
-	RGA = RandomizedGreedy(d, order, basis);
-	RGA = RGA.fit(X,Y);
-	[TestErr, MeanErr, StdDevErr] = RGA.TestErr(XTest, YTest, wTest);
+RGA = RandomizedGreedy(d, order, basis);
+RGA = RGA.fit(X,Y);
+[TestErr, MeanErr, StdDevErr] = RGA.TestErr(XTest, YTest, wTest);
 
 ```
 
