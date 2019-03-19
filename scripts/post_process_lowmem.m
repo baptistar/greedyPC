@@ -79,6 +79,13 @@ for k=1:length(models)
 
 end
 
+% extract models
+FPC_out  = models{1};
+BPDN_out = models{2};
+OMP_out  = models{3};
+OMPN_out = models{4};
+RGA_out  = models{5};
+
 % save matlab file with results
 save(['../results/' func_str '_d' num2str(d) '_ord' num2str(order)]);
 
