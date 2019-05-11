@@ -24,6 +24,12 @@ if exist(file_name, 'file')
     
 else
 
+	% check if sparse grid tool is in path
+	if (exist('sparse_grid_cfn_size','file') ~= 2) || ...
+	   (exist('sparse_grid_cc','file') ~= 2)
+		error('Please add sparse_grid tools to current path - see README');
+	end
+
 	% Calculate the number of points in the sparse grid
 	num_pts = sparse_grid_cfn_size(n_dim, grid_level);
 
@@ -31,7 +37,7 @@ else
 	[weights, nodes] = sparse_grid_cc(n_dim, grid_level, num_pts);
 
 	% Save files
-	save(['Sparse_Grid/' file_name], 'weights', 'nodes');
+	save(file_name, 'weights', 'nodes');
 
 end
 
