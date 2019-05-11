@@ -22,11 +22,11 @@ classdef L1Minimization < LeastSquaresPCE
 			% define LS PC object
 			L1@LeastSquaresPCE(dim, order, basis, varargin{:});
 
-            % check if spg_bpdn is in the path
-            if exist('spg_bpdn','file') ~= 2
-                error('Please add SPGL1 solver to path - see README');
-            end
-            
+			% check if spg_bpdn is in the path
+			if exist('spg_bpdn','file') ~= 2
+				error('Please add SPGL1 solver to path - see README');
+			end
+
 		end %endFunction
 		%------------------------------------------------------------------
 		%------------------------------------------------------------------
@@ -60,15 +60,15 @@ classdef L1Minimization < LeastSquaresPCE
 			% define A, b matrices for BPDN solver
 			A = Psi*W;
 			b = Y;
-            
+
 			% Solve for the solution
 			options = spgSetParms('verbosity',0,'weights',diag(W));
 			[soln,~,~,info] = spg_bpdn(A, b, delta, options);
 
 			% If not converged, print error message
-            if (info.stat > 5)
-                warning('BPDN solver did not converge.')
-            end
+			if (info.stat > 5)
+				warning('BPDN solver did not converge.')
+			end
 
 			% save solution in L1 structure
 			soln = W*soln;

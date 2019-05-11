@@ -63,6 +63,11 @@ parfor i=1:length(N)*n_trials
 
 end
 
+% check if sobol is in current path
+if exist('i4_sobol_generate','file') ~= 2
+    error('Please add Sobol scripts to path - see README')
+end
+
 %% Quasi Monte Carlo (Sobol) Sampling
 parfor i=1:length(N)
 

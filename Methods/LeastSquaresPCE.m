@@ -31,7 +31,7 @@ classdef LeastSquaresPCE
 		Psi         % evaluations of basis functions
 		Y 			% evaluations of model output
 
-    end
+	end
 
 	methods
 		function PC = LeastSquaresPCE(dim, order, basis, varargin)
@@ -84,9 +84,9 @@ classdef LeastSquaresPCE
 			% determine total number of samples
 			N = size(X,1);
 
-            % define matrix to store test error
-            test_error = nan(n_folds, length(delta_cv));
-            
+			% define matrix to store test error
+			test_error = nan(n_folds, length(delta_cv));
+
 			for i=1:n_folds
 
 				% Determine the number of terms in each set

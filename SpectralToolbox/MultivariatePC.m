@@ -97,11 +97,11 @@ classdef MultivariatePC
 			
 			% check if data is empty and return constant in this case
 			m = size(X,2);
-            if m == 0
+			if m == 0
 				Psi = mPC.poly.Evaluate(ones(m,1), 0, mPC.norm);
-            else
-                Psi = mPC.PolyVandermonde(X, 0, []);
-            end
+			else
+				Psi = mPC.PolyVandermonde(X, 0, []);
+			end
 
 		end %endFunction
 		%------------------------------------------------------------------
@@ -156,13 +156,13 @@ classdef MultivariatePC
 			% check dimension of input samples
 			if size(X,2) ~= mPC.dim
 				error('Inputs and poly dimension mismatch')
-            end
-            
+			end
+
 			% evaluate S(x) = Psi(x)*coeff
 			if isempty(mPC.basis_precomp)
 				mPC.basis_precomp = mPC.BasisEval(X);
-            end
-            S = mPC.basis_precomp*mPC.coeff;
+			end
+			S = mPC.basis_precomp*mPC.coeff;
 
 		end %endFunction
 		%------------------------------------------------------------------
@@ -191,12 +191,12 @@ classdef MultivariatePC
 			end
 
 			% evaluate (\nabla_x Psi(x))mPC.coeff,1,1,mPC.ncoeff
-            if isempty(mPC.dxbasis_precomp)
+			if isempty(mPC.dxbasis_precomp)
 				mPC.dxbasis_precomp = mPC.dxBasisEval(X);
-            end
+			end
 
 			% evaluate \nabla_x S(x) = (\nabla_x Psi(x))*coeff with reshape
-            coeff_rep = repmat(reshape(mPC.coeff,1,1,mPC.ncoeff),size(X,1),size(X,2),1);
+			coeff_rep = repmat(reshape(mPC.coeff,1,1,mPC.ncoeff),size(X,1),size(X,2),1);
 			dxS = sum(mPC.dxbasis_precomp.*coeff_rep,3);
 
 		end %endFunction

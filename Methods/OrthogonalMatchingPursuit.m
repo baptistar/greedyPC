@@ -56,23 +56,23 @@ classdef OrthogonalMatchingPursuit < LeastSquaresPCE
 			OMP.Y        = Y;
 			OMP.Psi 	 = Psi;
 			OMP.PsiNorm  = sum(Psi.^2,1);
-            OMP.residual = Y;
-            
-            % determine the number of basis elements
+			OMP.residual = Y;
+
+			% determine the number of basis elements
 			n_basis      = OMP.n_basis();
 
-            % define initial PC dictionary (including constant term)
+			% define initial PC dictionary (including constant term)
 			OMP.dict 	 = 2:n_basis;
 			OMP.indices  = 1;
 
-            % initialize Q, R, and PsiNorm (after updating OMP.indices)
-            if strcmp(OMP.alg, 'opt')
-                [OMP.Q, OMP.R, OMP.PsiNorm] = OMP.updateQR();
-            end
+			% initialize Q, R, and PsiNorm (after updating OMP.indices)
+			if strcmp(OMP.alg, 'opt')
+				[OMP.Q, OMP.R, OMP.PsiNorm] = OMP.updateQR();
+			end
 
 			% initialize L2 norm of residual
-            OMP.coeffs   = OMP.evalCoeffs();
-            OMP.residual = OMP.evalResidual();
+			OMP.coeffs   = OMP.evalCoeffs();
+			OMP.residual = OMP.evalResidual();
 			L2res = norm(OMP.residual, 2);
 
 			% run OMP until dictionary is empty or norm of 
@@ -88,7 +88,7 @@ classdef OrthogonalMatchingPursuit < LeastSquaresPCE
 				OMP.coeffs = OMP.evalCoeffs();
 
 				% evaluate training residual
-                OMP.residual = OMP.evalResidual();
+				OMP.residual = OMP.evalResidual();
 				L2res = norm(OMP.residual,2);
 
 				% update PsiNorm decomposition
@@ -149,7 +149,7 @@ classdef OrthogonalMatchingPursuit < LeastSquaresPCE
 			end
 
 			% update PsiNorm
-            Q_k = Q(:,length(OMP.indices));
+			Q_k = Q(:,length(OMP.indices));
 			PsiNorm = OMP.PsiNorm - (Q_k'*OMP.Psi).^2;
 
 		end %endFunction

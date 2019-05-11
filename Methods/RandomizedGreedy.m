@@ -26,8 +26,8 @@ classdef RandomizedGreedy < LeastSquaresPCE
 
 		diffAvg  % parameter for absolute change in mean LOO
 		pChange  % parameter for relative change in mean LOO
-        RepExp   % parameter for number of repeated RGA experiments
-        
+		RepExp   % parameter for number of repeated RGA experiments
+
 	end
 
 	methods
@@ -39,9 +39,9 @@ classdef RandomizedGreedy < LeastSquaresPCE
 			% define tolerances for termination criteria
 			RGA.diffAvg = 0;
 			RGA.pChange = 0.01;
-            
-            % define parameter for number of RGA experiments
-            RGA.RepExp  = 10;
+
+			% define parameter for number of RGA experiments
+			RGA.RepExp  = 10;
 
 		end %endFunction
 		%------------------------------------------------------------------
@@ -52,20 +52,20 @@ classdef RandomizedGreedy < LeastSquaresPCE
 			Psi = RGA.poly.BasisEval(X);
 
 			% repeat RGA training for RepExp times
-            RGA_PCE = cell(RGA.RepExp,1);
-            for i=1:RGA.RepExp
-                RGA_PCE{i} = RGA.train(Psi, Y);
-            end
-            
-            % extract LOO errors
-            RGA_LOO = zeros(RGA.RepExp,1);
-            for i=1:RGA.RepExp
-                RGA_LOO(i) = min(RGA_PCE{i}.LOO);
-            end
-            
-            % find expansion with minimum LOO error
-            [~,opt_idx] = min(RGA_LOO);
-            RGA = RGA_PCE{opt_idx};
+			RGA_PCE = cell(RGA.RepExp,1);
+			for i=1:RGA.RepExp
+				RGA_PCE{i} = RGA.train(Psi, Y);
+			end
+
+			% extract LOO errors
+			RGA_LOO = zeros(RGA.RepExp,1);
+			for i=1:RGA.RepExp
+				RGA_LOO(i) = min(RGA_PCE{i}.LOO);
+			end
+
+			% find expansion with minimum LOO error
+			[~,opt_idx] = min(RGA_LOO);
+			RGA = RGA_PCE{opt_idx};
 
 		end %endFunction
 		%------------------------------------------------------------------
@@ -76,21 +76,21 @@ classdef RandomizedGreedy < LeastSquaresPCE
 			RGA.Y        = Y;
 			RGA.Psi 	 = Psi;
 			RGA.PsiNorm  = sum(Psi.^2,1);
-            RGA.residual = Y;
+			RGA.residual = Y;
 
-            % determine the number of basis elements
+			% determine the number of basis elements
 			n_basis = RGA.n_basis();
 
-            % define PC dictionary (including constant term)
+			% define PC dictionary (including constant term)
 			RGA.dict = 2:n_basis;
 			RGA.indices = 1;
-				
-            % initialize Q, R, and PsiNorm (after updating RGA.indices)
-            [RGA.Q, RGA.R, RGA.PsiNorm] = RGA.updateQR();
 
-            % update residual and LOO error (after updating RGA.indices)
-            RGA.residual = RGA.evalResidual();
-            RGA.LOO      = RGA.LeaveOneOut();
+			% initialize Q, R, and PsiNorm (after updating RGA.indices)
+			[RGA.Q, RGA.R, RGA.PsiNorm] = RGA.updateQR();
+
+			% update residual and LOO error (after updating RGA.indices)
+			RGA.residual = RGA.evalResidual();
+			RGA.LOO      = RGA.LeaveOneOut();
 
 			% initialize termination criteria
 			term_crit = 0;
@@ -149,7 +149,7 @@ classdef RandomizedGreedy < LeastSquaresPCE
 		%------------------------------------------------------------------
 		function [residual] = evalResidual(RGA)
 			% update residual using QR decomposition
-            Q_k_ = RGA.Q(:,length(RGA.indices));
+			Q_k_ = RGA.Q(:,length(RGA.indices));
 			residual = RGA.residual - Q_k_'*RGA.Y*Q_k_;
 		end %endFunction
 		%------------------------------------------------------------------
@@ -182,30 +182,30 @@ classdef RandomizedGreedy < LeastSquaresPCE
 		%------------------------------------------------------------------
 		%------------------------------------------------------------------
 		function coeffs = evalCoeffs(RGA)
-            Q_ = RGA.Q(:,1:length(RGA.indices));
-            R_ = RGA.R(1:length(RGA.indices),:);
+			Q_ = RGA.Q(:,1:length(RGA.indices));
+			R_ = RGA.R(1:length(RGA.indices),:);
 			coeffs = R_\(Q_'*RGA.Y);
 		end %endFunction
 		%------------------------------------------------------------------
 		%------------------------------------------------------------------
 		function RGA = greedyBacktrack(RGA)
-        % update properties of PC approximation (Q, R, PsiNorm, residual)
-        % to setting at minimum of LOO error 
-            
+		% update properties of PC approximation (Q, R, PsiNorm, residual)
+		% to setting at minimum of LOO error 
+
 			% find minimum of stopping criteria (LOO)
 			[~, min_idx] = min(RGA.LOO);
 
 			% backtrack removing basis functions
 			for i=length(RGA.indices):-1:(min_idx+1)
 
-                % update PsiNorm and residual
-                Q_k_ = RGA.Q(:,length(RGA.indices));
+				% update PsiNorm and residual
+				Q_k_ = RGA.Q(:,length(RGA.indices));
 				RGA.PsiNorm  = RGA.PsiNorm + (Q_k_'*RGA.Psi).^2;
 				RGA.residual = RGA.residual + Q_k_'*RGA.Y*Q_k_;
 
 				% udate QR decomposition (by removing column)
 				[RGA.Q, RGA.R] = qrdelete(RGA.Q, RGA.R, i);
-                
+
 				% update dictionary and indices
 				RGA.dict = sort([RGA.dict, RGA.indices(end)]);
 				RGA.indices(end) = [];
@@ -213,14 +213,14 @@ classdef RandomizedGreedy < LeastSquaresPCE
 			end
 
 		end %endFunction
-        %------------------------------------------------------------------
+		%------------------------------------------------------------------
 		%------------------------------------------------------------------
 		function LOO = LeaveOneOut(RGA)
 
-            % extract residual and Q_k
-            residual_ = RGA.residual;
-            Q_ = RGA.Q(:,1:length(RGA.indices));
-            
+			% extract residual and Q_k
+			residual_ = RGA.residual;
+			Q_ = RGA.Q(:,1:length(RGA.indices));
+
 			% compute gradient with entrywise min for stability
 			res_gradient = 1 - sum(Q_.^2,2);
 			res_gradient = max(abs(res_gradient), 1e-12);
@@ -230,10 +230,10 @@ classdef RandomizedGreedy < LeastSquaresPCE
 			LOO = 1/N*sum((residual_./res_gradient).^2);
 
 		end %endFunction
-   		%------------------------------------------------------------------
+		%------------------------------------------------------------------
 		%------------------------------------------------------------------
 		function [Q, R, PsiNorm] = updateQR(RGA)
-        % update Q, R and PsiNorm after adding a new index to Psi 
+		% update Q, R and PsiNorm after adding a new index to Psi 
 
 			% extract Psi
 			Psi_ = RGA.Psi(:,RGA.indices);
@@ -246,7 +246,7 @@ classdef RandomizedGreedy < LeastSquaresPCE
 			end
 
 			% update PsiNorm
-            Q_k_ = Q(:,length(RGA.indices));
+			Q_k_ = Q(:,length(RGA.indices));
 			PsiNorm = RGA.PsiNorm - (Q_k_'*RGA.Psi).^2;
 
 		end %endFunction

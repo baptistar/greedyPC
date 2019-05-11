@@ -147,11 +147,11 @@ function [ind_interior,ind_boundary] = getindexesMesh(p, dim_lim)
   cpt_interior=0;
   for i=1:nbTot
       if ((p(1,i)==xmin)|(p(1,i)==xmax)|(p(2,i)==xmin)|(p(2,i)==xmax))
-	  cpt_boundary=cpt_boundary+1;
-	  ind_boundary(cpt_boundary)=i;        
+    cpt_boundary=cpt_boundary+1;
+    ind_boundary(cpt_boundary)=i;        
       else
-	  cpt_interior=cpt_interior+1;
-	  ind_interior(cpt_interior)=i;  
+    cpt_interior=cpt_interior+1;
+    ind_interior(cpt_interior)=i;  
       end
   end
   
